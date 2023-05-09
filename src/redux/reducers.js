@@ -1,7 +1,7 @@
 const initialState = {
     rows: 5,
     cols: 5,
-    gridData: Array(25).fill({ id: '', category: '', propertyScore: 0 })
+    gridData: Array(25).fill({ id: '', category: '', plotScore: 0 })
   };
   
   function rootReducer(state = initialState, action) {
@@ -10,20 +10,20 @@ const initialState = {
         return {
           ...state,
           rows: action.payload,
-          gridData: Array(action.payload * state.cols).fill({ id: '', category: '', propertyScore: 0 })
+          gridData: Array(action.payload * state.cols).fill({ id: '', category: '', plotScore: 0 })
         };
       case 'SET_COLS':
         return {
           ...state,
           cols: action.payload,
-          gridData: Array(state.rows * action.payload).fill({ id: '', category: '', propertyScore: 0 })
+          gridData: Array(state.rows * action.payload).fill({ id: '', category: '', plotScore: 0 })
         };
       case 'SET_GRID_DATA':
         return {
           ...state,
           gridData: state.gridData.map((gridItem, index) => {
             if (index === action.payload.id) {
-              return { ...gridItem, category: action.payload.category, id: action.payload.id, propertyScore: action.payload.propertyScore };
+              return { ...gridItem, category: action.payload.category, id: action.payload.id, plotScore: action.payload.plotScore };
             }
             return gridItem;
           })
@@ -31,7 +31,7 @@ const initialState = {
       case 'RESET_GRID_DATA':
         return {
           ...state,
-          gridData: state.gridData.map(item => ({ ...item, id:'' ,category: '', propertyScore: 0 }))
+          gridData: state.gridData.map(item => ({ ...item, id:'' ,category: '', plotScore: 0 }))
         };
       default:
         return state;

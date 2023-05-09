@@ -1,48 +1,40 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCols,setRows,setGridItem, resetGrid, updateGridItem} from "../../redux/gridSlice";
 import "./CreateLayout.css"
 import Plot from "./Plot";
 
 const CreateLayout = () => {
-  const [rows, setRows] = useState(5);
-  const [cols, setCols] = useState(5);
-  const [gridData, setGridData] = useState(
-    Array(rows * cols).fill({ id: "", category: "", plotScore: 0, plotName: "" })
-  );
+  const dispatch = useDispatch();
+  const rows = useSelector((state) => state.grid.rows);
+  const cols = useSelector((state) => state.grid.cols);
+  const gridData = useSelector((state) => state.grid.gridData);
 
   function handleRowsChange(event) {
-    setRows(event.target.value);
-    setGridData(Array(event.target.value * cols).fill({ id: "", category: "" ,plotScore: 0, plotName: "" }));
+    dispatch(setRows(event.target.value));
   }
 
   function handleColsChange(event) {
-    setCols(event.target.value);
-    setGridData(Array(rows * event.target.value).fill({ id: "", category: "",plotScore: 0, plotName: ""  }));
+    dispatch(setCols(event.target.value));
   }
 
-  function handleDrop(id, category, plotScore, plotName) {
-    setGridData(
-      gridData.map((gridItem, index) => {
-        if (index === id) {
-          return { ...gridItem, category, id, plotScore, plotName };
-        }
-        return gridItem;
-      })
-    );
+  function handleDrop(id, category, plotName) {
+    dispatch(setGridItem({ id, category, plotName }));
+    // dispatch(updateGridItem({ id, category, plotName }));
   }
 
   function handleDragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.dataset.category);
   }
 
-  function handleDragOver(event) {
-    event.preventDefault();
-  }
-
   const gridStyle = {
     gridTemplateRows: `repeat(${rows}, 1fr)`,
-    gridTemplateColumns: `repeat(${cols}, 1fr)`
+    gridTemplateColumns: `repeat(${cols}, 1fr)`,
   };
 
+  const handleReset = () => {
+    dispatch(resetGrid());
+  };
 
   return (
     <div className="container">
@@ -97,12 +89,14 @@ const CreateLayout = () => {
           <Plot
             key={index}
             id={index}
-            category={item.category}
             onDrop={handleDrop}
           />
         ))}
       </div>
     </div>
+    <button className="reset-button" onClick={handleReset}>
+      Reset
+    </button>
     </div>
 
   );
