@@ -6,24 +6,24 @@ const CreateLayout = () => {
   const [rows, setRows] = useState(5);
   const [cols, setCols] = useState(5);
   const [gridData, setGridData] = useState(
-    Array(rows * cols).fill({ id: "", category: "" })
+    Array(rows * cols).fill({ id: "", category: "", plotScore: 0, plotName: "" })
   );
 
   function handleRowsChange(event) {
     setRows(event.target.value);
-    setGridData(Array(event.target.value * cols).fill({ id: "", category: "" }));
+    setGridData(Array(event.target.value * cols).fill({ id: "", category: "" ,plotScore: 0, plotName: "" }));
   }
 
   function handleColsChange(event) {
     setCols(event.target.value);
-    setGridData(Array(rows * event.target.value).fill({ id: "", category: "" }));
+    setGridData(Array(rows * event.target.value).fill({ id: "", category: "",plotScore: 0, plotName: ""  }));
   }
 
-  function handleDrop(id, category) {
+  function handleDrop(id, category, plotScore, plotName) {
     setGridData(
       gridData.map((gridItem, index) => {
         if (index === id) {
-          return { ...gridItem, category };
+          return { ...gridItem, category, id, plotScore, plotName };
         }
         return gridItem;
       })
@@ -37,6 +37,12 @@ const CreateLayout = () => {
   function handleDragOver(event) {
     event.preventDefault();
   }
+
+  const gridStyle = {
+    gridTemplateRows: `repeat(${rows}, 1fr)`,
+    gridTemplateColumns: `repeat(${cols}, 1fr)`
+  };
+
 
   return (
     <div className="container">
@@ -55,7 +61,7 @@ const CreateLayout = () => {
           className="house"
           draggable
           onDragStart={handleDragStart}
-          data-category="House"
+          data-category="house"
         >
           House
         </button>
@@ -63,7 +69,7 @@ const CreateLayout = () => {
           className="gym"
           draggable
           onDragStart={handleDragStart}
-          data-category="Gym"
+          data-category="gym"
         >
           Gym
         </button>
@@ -71,7 +77,7 @@ const CreateLayout = () => {
           className="restaurant"
           draggable
           onDragStart={handleDragStart}
-          data-category="Restaurant"
+          data-category="restaurant"
         >
           Restaurant
         </button>
@@ -79,24 +85,26 @@ const CreateLayout = () => {
           className="hospital"
           draggable
           onDragStart={handleDragStart}
-          data-category="Hospital"
+          data-category="hospital"
         >
           Hospital
         </button>
       </div>
-      <div className="map-container">
-        <div className="map">
-          {gridData.map((item, index) => (
-            <Plot
-              key={index}
-              id={index}
-              category={item.category}
-              onDrop={handleDrop}
-            />
-          ))}
-        </div>
+
+      <div className="map-container" style={gridStyle}>
+      <div className="map" style={gridStyle}>
+        {gridData.map((item, index) => (
+          <Plot
+            key={index}
+            id={index}
+            category={item.category}
+            onDrop={handleDrop}
+          />
+        ))}
       </div>
     </div>
+    </div>
+
   );
 }
 
