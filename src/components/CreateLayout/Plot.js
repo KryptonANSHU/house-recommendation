@@ -1,34 +1,27 @@
 import React, { useState } from "react";
 import "./Plot.css"
 
-function Plot(props) {
-  const [category, setCategory] = useState("");
+function Plot({id, category, onDrop}) {
+  const [title, setTitle] = useState("");
 
-  const handleClick = () => {
-    props.onCategoryChange(category);
-  };
+  function handleDrop(event) {
+    event.preventDefault();
+    const category = event.dataTransfer.getData("text");
+    setTitle(category);
+    onDrop(id, category);
+  }
 
-  const getCategoryClass = () => {
-    switch (category) {
-      case "House":
-        return "house";
-      case "Gym":
-        return "gym";
-      case "Restaurant":
-        return "restaurant";
-      case "Hospital":
-        return "hospital";
-      default:
-        return "";
-    }
-  };
+  function handleDragOver(event) {
+    event.preventDefault();
+  }
 
   return (
     <div
-      className={`box ${getCategoryClass()}`}
-      onClick={handleClick}
+      className={`box ${category}`}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
     >
-      {category}
+      {title || id}
     </div>
   );
 }
