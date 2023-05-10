@@ -1,10 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import gridReducer from './gridSlice.js';
+import { combineReducers } from 'redux';
+import gridReducer from './gridSlice';
+import cordinateReducer from './cordinateSlice';
+
+const rootReducer = combineReducers({
+  grid: gridReducer,
+  coordinates: cordinateReducer,
+});
 
 const store = configureStore({
-  reducer: {
-    grid: gridReducer,
-  },
+  reducer: rootReducer,
 });
 
 export default store;
