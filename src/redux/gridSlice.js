@@ -5,8 +5,9 @@ const initialState = {
   cols: 0,
   gridData: Array(0).fill({ 
     id: '', 
-    category: '', 
-    plotName:'', 
+    category: '',
+    type:'', 
+    plotName:[], 
     coordinates: {row:-1,col:-1}, 
     plotScore: 0,
   }),
@@ -18,11 +19,11 @@ export const gridSlice = createSlice({
   reducers: {
     set_Rows: (state, action) => {
       state.rows = action.payload;
-      state.gridData = Array(action.payload * state.cols).fill({id:'' , category: '', plotScore: 0, plotName:''});
+      state.gridData = Array(action.payload * state.cols).fill({id:'' , category: '', plotScore: 0, plotName:[],type:''});
     },
     set_Cols: (state, action) => {
       state.cols = action.payload;
-      state.gridData = Array(state.rows * action.payload).fill({id:'', category: '', plotScore: 0,plotName:'' });
+      state.gridData = Array(state.rows * action.payload).fill({id:'', category: '', plotScore: 0,plotName:[], type:''});
     },
 
     update_Coordinates: (state, action) => {
@@ -33,11 +34,13 @@ export const gridSlice = createSlice({
     set_GridItem: (state, action) => {
       state.gridData = state.gridData.map((gridItem, index) => {
         if (index === action.payload.id) {
+          const newPlotName = [...gridItem.plotName, action.payload.plotName];
           return {
             ...gridItem,
             id: action.payload.id,
             category: action.payload.category,
-            plotName: action.payload.plotName,
+            plotName: newPlotName,
+            type: action.payload.type,
             plotScore: gridItem.plotScore + 1,
           };
         }
@@ -47,10 +50,12 @@ export const gridSlice = createSlice({
     update_GridItem: (state, action) => {
       const newGrid = state.gridData = state.gridData.map((gridItem, index) => {
         if (index === action.payload.id) {
+          const newPlotName = [...gridItem.plotName, action.payload.plotName];
           return {
             ...gridItem,
             category: action.payload.category,
-            plotName: `${gridItem.plotName}+${action.payload.plotName}`,
+            // plotName: `${gridItem.plotName}+${action.payload.plotName}`,
+            plotName: newPlotName,
             plotScore: gridItem.plotScore + 1,
           };
         }

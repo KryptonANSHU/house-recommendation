@@ -1,5 +1,9 @@
 import "./Plot.css"
 import { useSelector} from "react-redux";
+const TYPE = {
+  SERVICE:"SERVICE",
+  COMMERCIAL:"COMMERCIAL"
+}
 
 function Plot({ id, onDrop }) {
   const gridData = useSelector((state) => state.grid.gridData);
@@ -7,9 +11,15 @@ function Plot({ id, onDrop }) {
   function handleDrop(event) {
     event.preventDefault();
     const category = event.dataTransfer.getData("text");
-    const uniqueId = category + id;
+    const name = (`${category} ${id}`).toUpperCase();
+    let type='';
 
-    onDrop(id,category,uniqueId)
+    if(category === "house"){
+       type = TYPE.COMMERCIAL
+    }else{
+       type = TYPE.SERVICE
+    }
+    onDrop(id,category,name,type)
   }
 
   function handleDragOver(event) {
@@ -17,17 +27,22 @@ function Plot({ id, onDrop }) {
   }
   return (
     <div
-      className={`box ${gridData[id].category}`}
+      className={`box ${gridData[id].type}`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-    <div className="flex flex-col">
-      <h1 className="">{gridData[id].plotName }</h1>
-      <div className="flex">
-      {/* <h1>{gridData[id].coordinates.row}</h1>
-      <h1>{gridData[id].coordinates.col}</h1> */}
-      </div>
-    </div>
+        <div className="flex flex-col w-full h-full">
+          <div className="h-3/4">
+        {
+          gridData[id].plotName.map((name,index)=>{
+            return <h1 className="block">{name}</h1>
+          })
+        }
+          </div>
+          <div className="h-1/4">
+          <h1 className="text-right text-[8px]">{gridData[id].id}</h1>
+          </div>
+        </div>
     </div>
   );
 }

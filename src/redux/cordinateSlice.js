@@ -15,6 +15,7 @@ export const cordinateSlice = createSlice({
   initialState,
   reducers: {
     set_Home_Cordinates: (state, action) => {
+     
       state.homeCordinates.push(action.payload);
     },
     set_Hospital_Cordinates: (state, action) => {

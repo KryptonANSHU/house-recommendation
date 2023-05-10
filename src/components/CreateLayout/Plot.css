@@ -19,7 +19,7 @@
     color: #fff;
   }
   
-  .house {
+  /* .house {
     background-color: #ff8c00;
     border-color: #ff8c00;
     color: #fff;
@@ -40,5 +40,17 @@
   .hospital {
     background-color: #4169e1;
     border-color: #4169e1;
+    color: #fff;
+  } */
+
+  .COMMERCIAL{
+    background-color: #ff8c00;
+    border-color: #ff8c00;
+    color: #fff;
+  }
+
+  .SERVICE {
+    background-color: #39393b;
+    border-color: #252526;
     color: #fff;
   }

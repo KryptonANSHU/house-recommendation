@@ -26,12 +26,12 @@ const CreateLayout = () => {
   const rows = useSelector((state) => state.grid.rows);
   const cols = useSelector((state) => state.grid.cols);
   const gridData = useSelector((state) => state.grid.gridData);
-  const recommended_house_id = useSelector(
-    (state) => state.coordinates.recommended_house
-  );
+  const recommended_house = useSelector((state)=> state.coordinates.recommended_house)
+  const homeCordinates = useSelector((state)=> state.coordinates.homeCordinates);
+  
 
-  const [numRows, setNumRows] = useState(0);
-  const [numCols, setNumCols] = useState(0);
+  const [numRows, setNumRows] = useState(5);
+  const [numCols, setNumCols] = useState(5);
   const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
 
@@ -43,6 +43,30 @@ const CreateLayout = () => {
     setNumCols(event.target.value);
   };
 
+
+  // const isCoordinatePresentInGym = (gridData, id, gymCoordinates) => {
+  //   const coordinate = gridData[id].coordinates;
+  //   return gymCoordinates.some(gymCoordinate => {
+  //     return gymCoordinate.row === coordinate.row && gymCoordinate.col === coordinate.col;
+  //   });
+  // };
+  // const isCoordinatePresentInHospital = (gridData, id, hospitalCoordinates) => {
+  //   const coordinate = gridData[id].coordinates;
+  //   return hospitalCoordinates.some(hospitalCoordinate => {
+  //     return hospitalCoordinate.row === coordinate.row && hospitalCoordinate.col === coordinate.col;
+  //   });
+  // };
+  // const isCoordinatePresentInRestaurant = (gridData, id, restaurantCoordinates) => {
+  //   const coordinate = gridData[id].coordinates;
+  //   return restaurantCoordinates.some(restaurantCoordinate => {
+  //     return restaurantCoordinate.row === coordinate.row && restaurantCoordinate.col === coordinate.col;
+  //   });
+  // };
+  
+  const isPlotNameAlreadyExists = (gridData, id, newPlotName) => {
+    const plotNames = gridData[id].plotName;
+    return plotNames.includes(newPlotName);
+  };
   function handleGenerateClick() {
     if (numRows <= 0 || numCols <= 0) {
       // setShowModal(true);
@@ -66,13 +90,13 @@ const CreateLayout = () => {
     }
   }
 
-  function handleDrop(id, category, plotName) {
+  function handleDrop(id, category, plotName,type) { 
 
-    if (gridData[id].plotName === "") {
-      dispatch(set_GridItem({ id, category, plotName }));
-
+    if(gridData[id].plotName.length === 0){
+      dispatch(set_GridItem({ id, category, plotName, type }));     
       if (category === "house") {
         const coordinates = {
+          name: plotName,
           row: gridData[id].coordinates.row,
           col: gridData[id].coordinates.col,
         };
@@ -99,25 +123,55 @@ const CreateLayout = () => {
         };
         dispatch(set_Hospital_Cordinates(coordinates));
       }
-    }
-    
-    if (gridData[id].plotName !== "") {      
-      if(gridData[id].plotScore === 3){
-        alert("More Services Cannot be added")
-        return;
-      }
-      return dispatch(update_GridItem({ id, category, plotName }));
-    }
-
-  
-    
-    if(gridData[id].category === "house"){
-      alert("A House is Present over here. Services cannot be added in this block")
       return;
     }
 
-
+    if(gridData[id].plotName.length !== 0){
+      if(gridData[id].type === "COMMERCIAL"){
+        alert("This Field if of Type COMMERCIAL. Services cannot be added here")
+        return;
+      }else{
+        if(gridData[id].plotScore >= 3){
+          alert("Not More than 3 Services can be added");
+          return;
+        }else{
+            if(isPlotNameAlreadyExists(gridData,id,plotName)){
+                alert("Same SERVICE cannot be added on same plot twice")
+                return;
+            }else{
+              if(category === "house"){
+                alert("Home Cannot be Added in SERVICE type Plot")
+                return;
+              }
+              if (category === "gym") {
+                const coordinates = {
+                  row: gridData[id].coordinates.row,
+                  col: gridData[id].coordinates.col,
+                };
+                dispatch(set_Gym_Cordinates(coordinates));
+              }
+              if (category === "restaurant") {
+                const coordinates = {
+                  row: gridData[id].coordinates.row,
+                  col: gridData[id].coordinates.col,
+                };
+                dispatch(set_Restaurant_Cordinates(coordinates));
+              }
+              if (category === "hospital") {
+                const coordinates = {
+                  row: gridData[id].coordinates.row,
+                  col: gridData[id].coordinates.col,
+                };
+                dispatch(set_Hospital_Cordinates(coordinates));
+              }
+            }
+        }
+      }
+      dispatch(update_GridItem({id,category,plotName}))
+      return;
+    }
   }
+
 
   function handleDragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.dataset.category);
@@ -139,7 +193,6 @@ const CreateLayout = () => {
   const handleRecommend = () => {
     dispatch(calc_distance());
   };
-
   return (
     <div className="container">
       {/* <InputErrorModal showModal={showModal} setshowModal={setShowModal} /> */}
@@ -158,7 +211,7 @@ const CreateLayout = () => {
       </div>
       <div className="categories">
         <button
-          className="house"
+          className="house COMMERCIAL"
           draggable
           onDragStart={handleDragStart}
           data-category="house"
@@ -166,7 +219,7 @@ const CreateLayout = () => {
           House
         </button>
         <button
-          className="gym"
+          className="gym SERVICE"
           draggable
           onDragStart={handleDragStart}
           data-category="gym"
@@ -174,7 +227,7 @@ const CreateLayout = () => {
           Gym
         </button>
         <button
-          className="restaurant"
+          className="restaurant SERVICE"
           draggable
           onDragStart={handleDragStart}
           data-category="restaurant"
@@ -182,7 +235,7 @@ const CreateLayout = () => {
           Restaurant
         </button>
         <button
-          className="hospital"
+          className="hospital SERVICE"
           draggable
           onDragStart={handleDragStart}
           data-category="hospital"
@@ -208,6 +261,17 @@ const CreateLayout = () => {
           </button>
         </>
       )}
+
+      {
+        show && (
+          (recommended_house) !== -1 ? (<>
+          <h1>Answere is {homeCordinates[recommended_house].name}</h1>
+        </>) : (<>
+          <h1>Waiting for Answer</h1>
+        </>)
+        )
+  
+      }
     </div>
   );
 };
