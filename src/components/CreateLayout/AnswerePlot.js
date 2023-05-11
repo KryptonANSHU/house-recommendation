@@ -11,9 +11,9 @@ const AnswerPlot =({distanceIndex, name})=> {
     let hospitalDist = distance[distanceIndex].hospitalDist +' Km';
     let restaurantDist = distance[distanceIndex].restaurantDist + ' Km'
 
-    if(gymDist === '0 Km') gymDist = "Does Not Exist"
-    if(hospitalDist === '0 Km') hospitalDist = "Does Not Exist"
-    if(restaurantDist === '0 Km') restaurantDist = "Does Not Exist"
+    if(gymDist === '-1 Km') gymDist = "Does Not Exist"
+    if(hospitalDist === '-1 Km') hospitalDist = "Does Not Exist"
+    if(restaurantDist === '-1 Km') restaurantDist = "Does Not Exist"
   return (
     <div className="flex w-full">
 

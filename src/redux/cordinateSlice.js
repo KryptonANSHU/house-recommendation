@@ -29,30 +29,30 @@ export const cordinateSlice = createSlice({
     },
     calc_distance: (state) => {
       const distances = state.homeCordinates.map((home) => {
-        let gymDist = 0;
-        let hospitalDist = 0;
-        let restaurantDist = 0;
+        let gymDist = -1;
+        let hospitalDist = -1;
+        let restaurantDist = -1;
         // 0 means Service is not there on the Map
 
         if (state.gymCordinates.length !== 0) {
           gymDist = state.gymCordinates.reduce((prev, curr) => {
             const dist =
               Math.abs(home.row - curr.row) + Math.abs(home.col - curr.col);
-            return dist < prev ? dist : prev;
+            return dist < prev ? dist-1 : prev-1;
           }, Infinity);
         }
         if (state.restaurantCordinates.length !== 0) {
             restaurantDist = state.restaurantCordinates.reduce((prev, curr) => {
               const dist =
                 Math.abs(home.row - curr.row) + Math.abs(home.col - curr.col);
-              return dist < prev ? dist : prev;
+              return dist < prev ? dist-1 : prev-1;
             }, Infinity);
           }
         if (state.hospitalCordinates.length !== 0) {
           hospitalDist = state.hospitalCordinates.reduce((prev, curr) => {
             const dist =
               Math.abs(home.row - curr.row) + Math.abs(home.col - curr.col);
-            return dist < prev ? dist : prev;
+            return dist < prev ? dist-1 : prev-1;
           }, Infinity);
         }
         return {
