@@ -30,3 +30,31 @@
     border-color: #413936;
     color: #fff;
   }
+  .map {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    grid-gap: 10px;
+    max-width: 100%;
+  }
+  
+  /* Media query for screens smaller than 600px */
+  @media (max-width: 600px) {
+    .box {
+      min-width: 60px;
+      font-size: 8px;
+      height: 40px;
+    }
+  
+    .map {
+      grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+      grid-gap: 5px;
+    }
+  }
+ 
+  
+  
+  
+  
+  
+  
+  
