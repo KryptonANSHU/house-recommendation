@@ -288,9 +288,8 @@ function handleDrop(id, category, plotName,type) {
       {
         show && (
           (recommended_house) !== -1 ? (<>
-          <div className=" w-[60%] m-auto">
-          <h1 className="text-xl text-center font-semibold mb-2">Recommend {homeCordinates[recommended_house].name}</h1>
-          <AnswerPlot name = {homeCordinates[recommended_house].name}/>
+          <div className="w-full m-auto rounded-lg bg-orange-100 border-2 border-orange-500 p-4">
+          <AnswerPlot name = {homeCordinates[recommended_house].name} distanceIndex={recommended_house}/>
           </div>
         </>) : (<>
           <h1 className="text-xl font-semibold">Its Quite a tough task to choose the best home isn't it?</h1>
