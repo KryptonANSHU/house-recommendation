@@ -62,7 +62,6 @@ export const cordinateSlice = createSlice({
         };
       });
       state.distance = distances;
-      console.log(state.distance)
 
       // Now lets see the minimum distance
       let minimumDistance = Infinity;
@@ -74,7 +73,6 @@ export const cordinateSlice = createSlice({
                 index= i;
         }
       });
-      console.log(minimumDistance,"--",index)
       state.recommended_house = index;
     },
     reset_Coordinates: (state) => {

@@ -22,6 +22,13 @@ import {
   calc_distance,
 } from "../../redux/cordinateSlice";
 
+// Redux Store-
+// There are 2 set Slices
+// 1. gridSlice (Stores every info related to each plot) 
+// 2. cordinateSlice (Stores Coordinates of every Category as soon as they are added)
+//     (Note: The Formula for calculating is also in cordinateSlice)
+
+
 const CreateLayout = () => {
   const dispatch = useDispatch();
   const rows = useSelector((state) => state.grid.rows);
@@ -30,7 +37,7 @@ const CreateLayout = () => {
   const recommended_house = useSelector((state)=> state.coordinates.recommended_house)
   const homeCordinates = useSelector((state)=> state.coordinates.homeCordinates);
   
-
+  // States Used for Rows and Coloumns
   const [numRows, setNumRows] = useState(5);
   const [numCols, setNumCols] = useState(5);
   const [show, setShow] = useState(false);
@@ -40,20 +47,19 @@ const CreateLayout = () => {
   const [modalHeading, setModalHeading] = useState("");
   const [modalSubheading, setModalSubheading] = useState("");
 
-
   const handleRowsChange = (event) => {
     setNumRows(event.target.value);
   };
-
   const handleColsChange = (event) => {
     setNumCols(event.target.value);
   };
 
-  
+  // Function that restricts Duplicate Entries in the same Plot
   const isPlotNameAlreadyExists = (gridData, id, newPlotName) => {
     const plotNames = gridData[id].plotName;
     return plotNames.includes(newPlotName);
   };
+
 
   function handleGenerateClick() {
     if (numRows <= 0 || numCols <= 0) {
@@ -80,7 +86,7 @@ const CreateLayout = () => {
   }
 
 function handleDrop(id, category, plotName,type) { 
-
+    // Handles when the Plot is Initially Empty
     if(gridData[id].plotName.length === 0){
       dispatch(set_GridItem({ id, category, plotName, type }));     
       if (category === "house") {
@@ -115,6 +121,7 @@ function handleDrop(id, category, plotName,type) {
       return;
     }
 
+    // Handles when the Plot is not Empty
     if(gridData[id].plotName.length !== 0){
       if(gridData[id].type === "RESIDENTIAL"){
         setShowModal(true);
@@ -164,6 +171,7 @@ function handleDrop(id, category, plotName,type) {
             }
         }
       }
+      category = 'mixed';
       dispatch(update_GridItem({id,category,plotName}))
       return;
     }
@@ -181,8 +189,8 @@ function handleDrop(id, category, plotName,type) {
   const handleReset = () => {
     dispatch(reset_Grid());
     dispatch(reset_Coordinates());
-    setNumCols(0);
-    setNumRows(0);
+    setNumCols(5);
+    setNumRows(5);
     setShow(false);
   };
 
@@ -280,10 +288,12 @@ function handleDrop(id, category, plotName,type) {
       {
         show && (
           (recommended_house) !== -1 ? (<>
-          <h1 className="text-2xl font-semibold">Recommend {homeCordinates[recommended_house].name}</h1>
+          <div className=" w-[60%] m-auto">
+          <h1 className="text-xl text-center font-semibold mb-2">Recommend {homeCordinates[recommended_house].name}</h1>
           <AnswerPlot name = {homeCordinates[recommended_house].name}/>
+          </div>
         </>) : (<>
-          <h1 className="text-2xl font-semibold">Its Quite a tough task to choose the best home isn't it?</h1>
+          <h1 className="text-xl font-semibold">Its Quite a tough task to choose the best home isn't it?</h1>
         </>)
         )
   
