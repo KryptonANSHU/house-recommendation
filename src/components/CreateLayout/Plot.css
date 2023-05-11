@@ -19,38 +19,14 @@
     color: #fff;
   }
   
-  /* .house {
-    background-color: #ff8c00;
-    border-color: #ff8c00;
-    color: #fff;
-  }
-  
-  .gym {
-    background-color: #228b22;
-    border-color: #228b22;
-    color: #fff;
-  }
-  
-  .restaurant {
-    background-color: #dc143c;
-    border-color: #dc143c;
-    color: #fff;
-  }
-  
-  .hospital {
-    background-color: #4169e1;
-    border-color: #4169e1;
-    color: #fff;
-  } */
-
-  .COMMERCIAL{
-    background-color: #ff8c00;
-    border-color: #ff8c00;
+  .RESIDENTIAL{
+    background-color: #f48f29;
+    border-color: #f48f29;
     color: #fff;
   }
 
   .SERVICE {
-    background-color: #39393b;
-    border-color: #252526;
+    background-color: #413936;
+    border-color: #413936;
     color: #fff;
   }

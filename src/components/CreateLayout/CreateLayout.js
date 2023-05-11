@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InputErrorModal from "../Modals/InputErrorModal";
 import "./CreateLayout.css";
 import Plot from "./Plot";
+import AnswerPlot from "./AnswerePlot";
 import {
   set_Cols,
   set_Rows,
@@ -32,8 +33,13 @@ const CreateLayout = () => {
 
   const [numRows, setNumRows] = useState(5);
   const [numCols, setNumCols] = useState(5);
-  const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
+  
+  // States Used for Rendering Modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalHeading, setModalHeading] = useState("");
+  const [modalSubheading, setModalSubheading] = useState("");
+
 
   const handleRowsChange = (event) => {
     setNumRows(event.target.value);
@@ -43,34 +49,17 @@ const CreateLayout = () => {
     setNumCols(event.target.value);
   };
 
-
-  // const isCoordinatePresentInGym = (gridData, id, gymCoordinates) => {
-  //   const coordinate = gridData[id].coordinates;
-  //   return gymCoordinates.some(gymCoordinate => {
-  //     return gymCoordinate.row === coordinate.row && gymCoordinate.col === coordinate.col;
-  //   });
-  // };
-  // const isCoordinatePresentInHospital = (gridData, id, hospitalCoordinates) => {
-  //   const coordinate = gridData[id].coordinates;
-  //   return hospitalCoordinates.some(hospitalCoordinate => {
-  //     return hospitalCoordinate.row === coordinate.row && hospitalCoordinate.col === coordinate.col;
-  //   });
-  // };
-  // const isCoordinatePresentInRestaurant = (gridData, id, restaurantCoordinates) => {
-  //   const coordinate = gridData[id].coordinates;
-  //   return restaurantCoordinates.some(restaurantCoordinate => {
-  //     return restaurantCoordinate.row === coordinate.row && restaurantCoordinate.col === coordinate.col;
-  //   });
-  // };
   
   const isPlotNameAlreadyExists = (gridData, id, newPlotName) => {
     const plotNames = gridData[id].plotName;
     return plotNames.includes(newPlotName);
   };
+
   function handleGenerateClick() {
     if (numRows <= 0 || numCols <= 0) {
-      // setShowModal(true);
-      alert("Enter Valid Values")
+      setShowModal(true);
+      setModalHeading("Enter Valid Values")
+      setModalSubheading("Rows and Coloumns can't be Negative or Zero!")
       return;
     }
 
@@ -90,7 +79,7 @@ const CreateLayout = () => {
     }
   }
 
-  function handleDrop(id, category, plotName,type) { 
+function handleDrop(id, category, plotName,type) { 
 
     if(gridData[id].plotName.length === 0){
       dispatch(set_GridItem({ id, category, plotName, type }));     
@@ -127,20 +116,28 @@ const CreateLayout = () => {
     }
 
     if(gridData[id].plotName.length !== 0){
-      if(gridData[id].type === "COMMERCIAL"){
-        alert("This Field if of Type COMMERCIAL. Services cannot be added here")
+      if(gridData[id].type === "RESIDENTIAL"){
+        setShowModal(true);
+        setModalHeading("Residential Area!!")
+        setModalSubheading("This is a Residential Area. Services Cannot be added here")
         return;
       }else{
         if(gridData[id].plotScore >= 3){
-          alert("Not More than 3 Services can be added");
-          return;
+          setShowModal(true);
+        setModalHeading("Limit Reached!!")
+        setModalSubheading("Already 3 Services present on 1 plot. Can't add more")
+        return;
         }else{
             if(isPlotNameAlreadyExists(gridData,id,plotName)){
-                alert("Same SERVICE cannot be added on same plot twice")
-                return;
+              setShowModal(true);
+              setModalHeading("Duplicate Service!!")
+              setModalSubheading("Same Service cannot be added twice on a Plot")
+              return;
             }else{
               if(category === "house"){
-                alert("Home Cannot be Added in SERVICE type Plot")
+                setShowModal(true);
+                setModalHeading("Service Area")
+                setModalSubheading("This is a Service Area. Homes Cannot be added here!")
                 return;
               }
               if (category === "gym") {
@@ -170,8 +167,7 @@ const CreateLayout = () => {
       dispatch(update_GridItem({id,category,plotName}))
       return;
     }
-  }
-
+}
 
   function handleDragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.dataset.category);
@@ -191,11 +187,19 @@ const CreateLayout = () => {
   };
 
   const handleRecommend = () => {
+    if(homeCordinates.length === 0){
+      setShowModal(true);
+      setModalHeading("No Homes Found!!")
+      setModalSubheading("What would I suggest you if there are no Homes on the map. Add at least one Home")
+      return;
+    }
+
     dispatch(calc_distance());
   };
   return (
     <div className="container">
-      {/* <InputErrorModal showModal={showModal} setshowModal={setShowModal} /> */}
+    <div className="top-part ">
+      <InputErrorModal showModal={showModal} setshowModal={setShowModal} heading={modalHeading} subheading={modalSubheading}/>
       <div className="label-container">
         <label>
           Rows:
@@ -211,7 +215,7 @@ const CreateLayout = () => {
       </div>
       <div className="categories">
         <button
-          className="house COMMERCIAL"
+          className="house RESIDENTIAL"
           draggable
           onDragStart={handleDragStart}
           data-category="house"
@@ -243,7 +247,15 @@ const CreateLayout = () => {
           Hospital
         </button>
       </div>
+      {
+        show && (
+      <div>
+        <h1 className="text-sm font-semibold text-center rounded-lg">(Drag and Drop Entities to set on the Map)</h1>
+      </div>
+      )
+      }
 
+    </div>
       <div className="map-container" style={gridStyle}>
         <div className="map" style={gridStyle}>
           {gridData.map((item, index) => (
@@ -251,27 +263,32 @@ const CreateLayout = () => {
           ))}
         </div>
       </div>
+    
       {show && (
         <>
-          <button className="reset-button m-2" onClick={handleReset}>
+        <div className="flex">
+          <button className="reset-button m-4" onClick={handleReset}>
             Reset
           </button>
           <button className="reset-button m-4" onClick={handleRecommend}>
             Recommend Best House
           </button>
+        </div>
         </>
       )}
-
+      <div className="answer mt-5">
       {
         show && (
           (recommended_house) !== -1 ? (<>
-          <h1>Answere is {homeCordinates[recommended_house].name}</h1>
+          <h1 className="text-2xl font-semibold">Recommend {homeCordinates[recommended_house].name}</h1>
+          <AnswerPlot name = {homeCordinates[recommended_house].name}/>
         </>) : (<>
-          <h1>Waiting for Answer</h1>
+          <h1 className="text-2xl font-semibold">Its Quite a tough task to choose the best home isn't it?</h1>
         </>)
         )
   
       }
+      </div>
     </div>
   );
 };

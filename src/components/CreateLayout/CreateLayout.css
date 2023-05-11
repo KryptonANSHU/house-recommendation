@@ -24,9 +24,17 @@ input[type="number"] {
   padding: 5px;
   border: none;
   border-radius: 5px;
-  background-color: #f2f2f2;
+  outline: none;
+  background-color: rgb(255, 251, 251);
+  color: black;
   margin-top: 5px;
 }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 
 .categories {
   display: flex;
@@ -39,14 +47,16 @@ button {
   margin-right: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #f2f2f2;
-  color: #333;
+  background-color: #0b5bac;
+  color: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
+
+
 button:hover {
-  background-color: #333;
+  background-color: #333333;
   color: #fff;
 }
 
@@ -64,15 +74,18 @@ button:hover {
 }
 
 .reset-button {
-  background-color: #ffffff;
+  background-color: #0b5bac;;
   border: 1px solid #dddddd;
   border-radius: 4px;
-  color: #333333;
+  color: white;
   font-size: 14px;
   padding: 8px 16px;
   cursor: pointer;
 }
 
 .reset-button:hover {
-  background-color: #eeeeee;
+  background-color: #353030;
 }
+
+
+

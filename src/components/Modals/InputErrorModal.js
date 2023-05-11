@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
-import Portal from "./Portal";
+import './button.css'
 
-const InputErrorModal = ({ showModal, setshowModal }) => {
+const InputErrorModal = ({ showModal, setshowModal, heading, subheading }) => {
 const onCancel = () => {
     setshowModal(false)
 }
@@ -9,23 +9,22 @@ const onCancel = () => {
 if(showModal){
     return (
     <>
-    <div className='justify-center backdrop-blur-md items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
+    <div className='justify-center backdrop-blur-sm items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
             <div className='relative w-auto my-6 mx-auto max-w-lg'>
-                <div className='p-4 bg-black font-manrope text-white border-[1px] border-gray-600'>
+                <div className='p-6 bg-gray-300 text-black border-gray-600 rounded-md'>
                     <div className='flex flex-col items-center justify-center'>
                         <div className='relative text-center w-full'>
-                            <h1 className="text-2xl flex-1 uppercase text-blue">
-                                Please Enter Valid Values
+                            <h1 className="text-2xl font-semibold flex-1 uppercase text-blue">
+                               {heading}
                             </h1>
-                            <button
-                                className="p-3 absolute top-0 right-0 bg-custom-blue text-white text-sm font-bold uppercase px-6 py-3 rounded w-full max-w-xs"
+                        </div>
+                        <h3 className='text-lg my-3 w-full break-words text-center'>{subheading}</h3>
+                        <button
+                                className=" w-full heroButton"
                                 onClick={onCancel}
                             >
-                                <img src="/icons/cross.png" alt="" className='w-3' />
                                 OK
                             </button>
-                        </div>
-                        <h3 className='text-lg my-3 w-full break-words text-center'>Rows and Coloumns cannot be less than 0</h3>
                     </div>
                     <div className='flex items-center justify-center px-4'>
                         

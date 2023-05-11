@@ -2,7 +2,7 @@ import "./Plot.css"
 import { useSelector} from "react-redux";
 const TYPE = {
   SERVICE:"SERVICE",
-  COMMERCIAL:"COMMERCIAL"
+  RESIDENTIAL:"RESIDENTIAL"
 }
 
 function Plot({ id, onDrop }) {
@@ -15,7 +15,7 @@ function Plot({ id, onDrop }) {
     let type='';
 
     if(category === "house"){
-       type = TYPE.COMMERCIAL
+       type = TYPE.RESIDENTIAL
     }else{
        type = TYPE.SERVICE
     }
