@@ -38,21 +38,21 @@ export const cordinateSlice = createSlice({
           gymDist = state.gymCordinates.reduce((prev, curr) => {
             const dist =
               Math.abs(home.row - curr.row) + Math.abs(home.col - curr.col);
-            return dist < prev ? dist-1 : prev-1;
+            return dist < prev ? dist : prev;
           }, Infinity);
         }
         if (state.restaurantCordinates.length !== 0) {
             restaurantDist = state.restaurantCordinates.reduce((prev, curr) => {
               const dist =
                 Math.abs(home.row - curr.row) + Math.abs(home.col - curr.col);
-              return dist < prev ? dist-1 : prev-1;
+              return dist < prev ? dist : prev;
             }, Infinity);
           }
         if (state.hospitalCordinates.length !== 0) {
           hospitalDist = state.hospitalCordinates.reduce((prev, curr) => {
             const dist =
               Math.abs(home.row - curr.row) + Math.abs(home.col - curr.col);
-            return dist < prev ? dist-1 : prev-1;
+            return dist < prev ? dist : prev;
           }, Infinity);
         }
         return {

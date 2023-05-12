@@ -7,9 +7,9 @@ const AnswerPlot =({distanceIndex, name})=> {
   const distance = useSelector((state)=> state.coordinates.distance)
     const arr = name.split(" ");
     const id = arr[1];
-    let gymDist = distance[distanceIndex].gymDist + ' Km';
-    let hospitalDist = distance[distanceIndex].hospitalDist +' Km';
-    let restaurantDist = distance[distanceIndex].restaurantDist + ' Km'
+    let gymDist = (distance[distanceIndex].gymDist- 1) + ' Km';
+    let hospitalDist = (distance[distanceIndex].hospitalDist - 1) +' Km';
+    let restaurantDist = (distance[distanceIndex].restaurantDist -1) + ' Km'
 
     if(gymDist === '-1 Km') gymDist = "Does Not Exist"
     if(hospitalDist === '-1 Km') hospitalDist = "Does Not Exist"
